@@ -1,0 +1,26 @@
+# the mysql user to connect as.  Note that mysql servers are assumed to have a single user.
+user monitor_user
+# password.  also may be supplied on the command line
+password example_password
+
+## directory where mmtop may write its "wedge" logs
+# logdir /home/foo/mmtop_log
+
+# add a host to monitor
+host db01
+
+## add a comment to this host
+# comment Master database
+
+## enable "wedge" monitoring for this host -- if a threshold of number of 
+## slow queries is reached, dump the queries and SHOW INNODB STATUS to a file
+# wedge on 
+
+## Disable replication monitoring for this host
+# no-slave
+
+
+## another host
+# host db02
+## ....
+
