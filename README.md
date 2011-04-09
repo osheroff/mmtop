@@ -3,7 +3,7 @@ This is mmtop, standing for "Multiple Mysql Top".  It's designed to replace myto
 in larger production environments, where multiple database servers must be monitored
 simultaneously. 
 
-# Features
+#### Features
   * Monitor the queries of many mysql servers at once
   * Kill many overly long (the site's about to die!) queries with a keystroke or two
   * Some things that mytop supports; explain query, kill query. 
