@@ -33,13 +33,25 @@ by.  Here's how mine looks:
 		|---|-----| db04  !io !sql 1 cxs-----------------------------------------------------------------------------------------------------------------------------------------------|
 		|---|-----| db05  !io !sql 279 cxs---------------------------------------------------------------------------------------------------------------------------------------------|
 		|---|-----| db06 0 265 cxs-----------------------------------------------------------------------------------------------------------------------------------------------------|
-		|  0|  528|                           
+		|  0|  528| SELECT foo from bar                          
 		|---|-----| account01 298 cxs--------------------------------------------------------------------------------------------------------------------------------------------------|
 
+Your most important commands from the listing mode:
+		"p": Pause the listing.  Bring up a prompt.
+		"q": Quit
 
+Now from the prompt:
+		"x [PID]" Show the full text of the query, its state, and what host it's running on
+		"k [PID]" Kill the query.  mmtop will prompt you to make sure, as the author is a bonehead sometimes.
+		"ex [PID]" Explain the query (note; currently broken)
+		"l [HOST]" List the clients (and their connection count) currently connected to this host
+		"k long [HOST] [TIME]" Kill any SELECT queries that have been running for longer than [TIME] on [HOST]
+				       (todo: explain better)
+
+#### TODO: 
+Housekeeping.  k-long should be better.  help from the prompt.  QPS for hosts, maybe some innodb stats too. 
 
 #### Questions? 
-
 No one ever has any questions.  Feel free to message me here on github with bugs or what
 not. 
 
