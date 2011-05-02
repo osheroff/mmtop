@@ -1,0 +1,17 @@
+GIT
+  remote: https://github.com/brianmario/mysql2.git
+  revision: 3f972389c1c35b91666457e4794fa8439a7932bc
+  specs:
+    mysql2 (0.3.2)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    getopt-declare (1.29)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  getopt-declare
+  mysql2!
