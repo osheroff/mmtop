@@ -414,13 +414,23 @@ while ( $quit == 0 ) {
 						for ( $i = 0; $i < @longs; $i++ ) { 
 							print colored("[$i]: (" . $longs[$i]{'server'} . ")" . " " . &short_query($longs[$i]{'q'}, 80) . "\n", $i % 2 == 0 ? "white bold" : "reset");
 						}
-						print "(which?) >";
+						print "(which? use format of *|1,3,4|1-3,5,6) >";
 						$line = ReadLine 0;
 						if ($line eq "\n" ) {
 							ReadMode cbreak;
 							$paused = 0;
 							last;
-						} elsif ( $line eq "*\n" ) {
+						} else { 
+              $ids = split(/,/, $line); 
+              my @to_kill;
+              foreach $id ( $ids ) { 
+                if ( $id =~ /-/ ) { 
+                  ($first, $last) = $id.split(/-/);
+                  push @to_kill, $first..$last
+                }
+($id in 
+
+ ( $line eq "*\n" ) {
 							my ($k);
 							for ($k = 0; $k < @longs; $k++) {
 								$server = $longs[$k]{'server'};
