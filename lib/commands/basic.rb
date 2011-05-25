@@ -58,15 +58,15 @@ MMTop::Command.register do |c|
 end
 
 MMTop::Command.register do |c|
-  c.regexp /^ex|explain\s+(\d+)/
+  c.regexp /^(?:ex|explain)\s+(\d+)/
   c.usage "explain PID"
   c.explain "Show query plan"
   c.command do |cmd, config|
     cmd =~ c.regexp
     pid = $1.to_i
-    pp pid
     ps = config.find_pid(pid)
     if ps
+      puts ps.sql
       explain = ps.explain
       pp explain
     else
