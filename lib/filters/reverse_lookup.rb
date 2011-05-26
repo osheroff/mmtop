@@ -10,16 +10,17 @@ module MMTop
 
       return @@lookups[client] + ":" + split[1] if @@lookups[client]
 
-      hostline = %x{dig -x #{client} +short}
-      hostline.gsub!(/([^\.]+)\./, '\1')
+      hostline = %x{dig -x #{client} +short}.chomp
+      hostline.gsub!(/([^\.]+)\..*/, '\1')
       @@lookups[client] = hostline
       @@lookups[client] + ":" + split[1]
     end
   end
-end
 
-Filter.add_filter("reverse_lookup") do |queries|
-  queries.each do |q|
-    q.host = MMTop::ReverseLookup.lookup(q.host)
+  Filter.add_filter("reverse_lookup") do |queries|
+    queries.each do |q|
+      q.client = MMTop::ReverseLookup.lookup(q.client)
+    end
   end
 end
+

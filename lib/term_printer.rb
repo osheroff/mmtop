@@ -108,7 +108,7 @@ module MMTop
 
     def print_process(p)
       return if p.status.nil? || p.status.empty?
-      str = pipe + " " + column_value(0, p.client)
+      str = pipe + " " + column_value(0, "  " + p.client)
       str += info_sep + column_value(1, p.id ? p.id.to_s : '')
       str += info_sep + column_value(2, format_time(p.time))
       str += info_sep 

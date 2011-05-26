@@ -44,13 +44,14 @@ module MMTop
     def initialize(host, processlist, slave_status)
       @host = host
       @processlist = processlist
+      @connections = processlist.clone
       @slave_status = slave_status
     end
 
     attr_reader :host, :processlist, :slave_status
 
     def connections
-      processlist.size
+      @connections.size
     end
   end
 end
