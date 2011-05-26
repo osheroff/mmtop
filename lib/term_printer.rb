@@ -79,6 +79,7 @@ module MMTop
     end
 
     def format_slave_delay(status)
+      return "N/A" unless status
       if status[:Seconds_Behind_Master].nil?
         "N/A"
       else
