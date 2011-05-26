@@ -16,6 +16,7 @@ require 'lib/term_printer'
 require 'lib/term_input'
 require 'lib/command'
 require 'lib/pid'
+require 'lib/filter'
 
 
 spec = <<-EOL

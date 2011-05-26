@@ -16,10 +16,13 @@ module MMTop
         h['password'] ||= (pass || config['password'])
         Host.new(h['host'], h['user'], h['password'], h)
       end
+
+      @filters = MMTop::Filter.default_filters
     end
 
     attr_accessor :hosts
     attr_accessor :info
+    attr_accessor :filters
 
     def find_pid(pid)
       ret = info.map { |i|
@@ -31,8 +34,17 @@ module MMTop
       ret[0]
     end
 
+    def run_filters
+      @info.each do |i|
+        @filters.each do |f|
+          f.run(i.processlist)
+        end
+      end
+    end
+
     def get_info
       @info = hosts.map { |h| h.hostinfo }
+      run_filters
     end
   end
 end
