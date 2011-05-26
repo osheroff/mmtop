@@ -8,6 +8,6 @@ module MMTop
   end
 
   Filter.add_filter('sort_by_time') do |queries|
-    queries.sort_by { |q| -q.time }
+    queries.sort! { |a, b| b.time <=> a.time }
   end
 end
