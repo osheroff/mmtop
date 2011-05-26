@@ -7,10 +7,11 @@ module MMTop
       @status = result[:State]
       @time = result[:Time]
       @client = result[:Host]
+      @db = result[:db]
       @host = host
     end
 
-    attr_accessor :id, :query, :status, :time, :client, :host
+    attr_accessor :id, :query, :status, :time, :client, :host, :db
 
     def kill!
       @host.query("KILL #{@real_id}")
@@ -21,6 +22,7 @@ module MMTop
     end
 
     def explain
+      @host.query("use #{db}")
       @host.query("explain #{sql}")
     end
   end

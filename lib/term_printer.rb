@@ -79,10 +79,10 @@ module MMTop
     end
 
     def format_slave_delay(status)
-      if status[:Seconds_behind_master].nil?
+      if status[:Seconds_Behind_Master].nil?
         "N/A"
       else
-        status[:Seconds_behind_master].to_i
+        format_time(status[:Seconds_Behind_Master])
       end
     end
 
@@ -102,7 +102,7 @@ module MMTop
     end
 
     def clear_screen
-      print "\e[2J\e[f"
+      print "\033[H\033[2J"
     end
 
     def print_process(p)
@@ -110,7 +110,8 @@ module MMTop
       str = pipe + " " + column_value(0, p.client)
       str += info_sep + column_value(1, p.id ? p.id.to_s : '')
       str += info_sep + column_value(2, format_time(p.time))
-      str += info_sep + shorten_query(p.query, @x - str.size - 1)
+      str += info_sep 
+      str += shorten_query(p.query, @x - str.size - 1)
       str += " " * (@x - str.size - 1) + pipe
       puts str
     end
