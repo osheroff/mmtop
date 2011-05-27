@@ -147,6 +147,7 @@ module MMTop
         print_host(info)
       end
       print_footer
+      $stdout.flush
     end
   end
 end

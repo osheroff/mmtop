@@ -4,7 +4,7 @@ module MMTop
       return client if client.nil? or client.empty?
       return client unless client =~ /\d+\.\d+\.\d+\.\d+/
 
-      @@lookups = {}
+      @@lookups ||= {}
 
       return @@lookups[client] if @@lookups[client]
 
