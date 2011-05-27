@@ -8,6 +8,7 @@ module MMTop
       m2opts[:socket] = options['socket'] if options['socket']
       m2opts[:port] = options['port'] if options['port']
       @mysql = Mysql2::Client.new(m2opts)
+      @mysql.reconnect = true
       # rescue connection errors or sumpin
       @options = options
       @name = hostname
