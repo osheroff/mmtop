@@ -14,8 +14,14 @@ module MMTop
       @hosts = config['hosts'].map do |h|
         h['user'] ||= (user || config['user'])
         h['password'] ||= (pass || config['password'])
-        Host.new(h['host'], h['user'], h['password'], h)
-      end
+
+        begin
+          Host.new(h['host'], h['user'], h['password'], h)
+        rescue Mysql2::Error => e
+          puts e
+          nil
+        end
+      end.compact
 
       @filters = MMTop::Filter.default_filters
     end
