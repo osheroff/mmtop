@@ -51,7 +51,7 @@ module MMTop
     attr_reader :host, :processlist, :slave_status
 
     def connections
-      @connections.size
+      @connections
     end
   end
 end

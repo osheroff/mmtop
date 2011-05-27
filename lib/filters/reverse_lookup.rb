@@ -5,15 +5,13 @@ module MMTop
       return client unless client =~ /\d+\.\d+\.\d+\.\d+/
 
       @@lookups = {}
-      split  = client.split(':')
-      client = split[0]
 
-      return @@lookups[client] + ":" + split[1] if @@lookups[client]
+      return @@lookups[client] if @@lookups[client]
 
       hostline = %x{dig -x #{client} +short}.chomp
       hostline.gsub!(/([^\.]+)\..*/, '\1')
       @@lookups[client] = hostline
-      @@lookups[client] + ":" + split[1]
+      @@lookups[client] 
     end
   end
 

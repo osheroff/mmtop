@@ -34,6 +34,10 @@ module MMTop
       ret[0]
     end
 
+    def find_server(name)
+      @info.detect { |i| i.host.name.downcase == name }
+    end
+
     def run_filters
       @info.each do |i|
         @filters.each do |f|

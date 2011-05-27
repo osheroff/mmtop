@@ -75,4 +75,28 @@ MMTop::Command.register do |c|
   end
 end
 
+MMTop::Command.register do |c|
+  c.regexp /^(?:l|list)\s+(\S+)/
+  c.usage "list HOST"
+  c.explain "List hosts and their connections to this server"
+  c.command do |cmd, config|
+    cmd =~ c.regexp
+    host = $1
 
+    server = config.find_server(host)
+    if server
+      cxs = {}
+      server.connections.each do |cx|
+        client = MMTop::ReverseLookup.lookup(cx.client)
+        cxs[client] ||= 0
+        cxs[client] += 1
+      end
+
+      cxs.sort_by { |k, v| [-v, k] }.each { |k, v|
+        puts "#{k}: #{v}"
+      }
+    else
+      puts "No such host: #{server}"
+    end
+  end
+end

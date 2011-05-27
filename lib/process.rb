@@ -6,7 +6,9 @@ module MMTop
       @query = result[:Info]
       @status = result[:State]
       @time = result[:Time]
-      @client = result[:Host]
+      @client, @client_port = result[:Host] && result[:Host].split(":") 
+      @client ||= "(slave)"
+      @client_port ||= ""
       @db = result[:db]
       @host = host
     end

@@ -120,7 +120,7 @@ module MMTop
     def print_host(info)
       str = pipe + " " + column_value(0, info.host.name + " ", "-")
       str += sep_fill + column_fill(1) + sep_fill + column_fill(2)
-      str += info_sep + column_value(3, info.connections.to_s)
+      str += info_sep + column_value(3, info.connections.size.to_s)
       str += info_sep + column_value(4, format_slave_status(info.slave_status))
       str += info_sep + column_value(5, format_slave_delay(info.slave_status))
       str += info_sep
