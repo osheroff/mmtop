@@ -4,7 +4,7 @@ MMTop::Command.register do |c|
   c.explain "Display this text"
   c.command do |cmd, config|
     MMTop::Command.commands.sort_by(&:usage).each do |c|
-      puts "%-30s %s" % [c.usage, c.explain]
+      puts "%-50s %s" % [c.usage, c.explain]
     end
   end
 end

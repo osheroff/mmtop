@@ -11,6 +11,13 @@ module MMTop
       def default_filters
         @filters.select(&:default)
       end
+
+      def from_string(string)
+        final = string.sub(/^\s*\{/, '').sub(/\}$/, '')
+        p = eval("Proc.new { |qlist| qlist.reject! { |query| !(#{final}) } }")
+        new(string, false, &p)
+      end
+
     end
 
     def initialize(name, default, &block)
