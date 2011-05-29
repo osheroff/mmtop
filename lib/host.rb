@@ -12,6 +12,7 @@ module MMTop
       # rescue connection errors or sumpin
       @options = options
       @name = hostname
+      @last_queries = nil
     end
 
     attr_accessor :name
@@ -30,6 +31,20 @@ module MMTop
       query("show slave status")[0]
     end
 
+    def stats
+      stats = {}
+      queries = query("show global status like 'Questions'")[0][:Value].to_i
+
+      if @last_queries
+        qps = (queries - @last_queries[:count]) / (Time.now.to_i - @last_queries[:time])
+        stats[:qps] = qps
+      end
+      @last_queries = {}
+      @last_queries[:count] = queries
+      @last_queries[:time] = Time.now.to_i
+      stats
+    end
+
     def processlist
       processlist = query("show full processlist")
 
@@ -37,19 +52,20 @@ module MMTop
     end
 
     def hostinfo
-      HostInfo.new(self, processlist, slave_status)
+      HostInfo.new(self, processlist, slave_status, stats)
     end
   end
 
   class HostInfo
-    def initialize(host, processlist, slave_status)
+    def initialize(host, processlist, slave_status, stats)
       @host = host
       @processlist = processlist
       @connections = processlist.clone
       @slave_status = slave_status
+      @stats = stats
     end
 
-    attr_reader :host, :processlist, :slave_status
+    attr_reader :host, :processlist, :slave_status, :stats
 
     def connections
       @connections

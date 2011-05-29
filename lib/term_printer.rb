@@ -43,7 +43,7 @@ module MMTop
     end
 
     def table_header_columns
-      ["hostname        ", "pid  ", "time", "#cx", "slave  ", "delay", Time.now.to_s]
+      ["hostname        ", "pid  ", "time", "#cx", "slave  ", "delay", "qps   ", Time.now.to_s]
     end
 
     def column_fill(index)
@@ -79,7 +79,7 @@ module MMTop
     end
 
     def format_slave_delay(status)
-      return "N/A" unless status
+      return "" unless status
       if status[:Seconds_Behind_Master].nil?
         "N/A"
       else
@@ -123,6 +123,7 @@ module MMTop
       str += info_sep + column_value(3, info.connections.size.to_s)
       str += info_sep + column_value(4, format_slave_status(info.slave_status))
       str += info_sep + column_value(5, format_slave_delay(info.slave_status))
+      str += info_sep + column_value(6, info.stats[:qps].to_s)
       str += info_sep
       str += "-" * (@x - str.size - 1)
       str += pipe
