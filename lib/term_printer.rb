@@ -1,9 +1,9 @@
-require 'curses'
+require 'lib/string_colorize'
 
 module MMTop
   class TermPrinter
     def initialize
-
+      $stdout.sync = true
     end
 
     def get_dim
@@ -11,27 +11,27 @@ module MMTop
     end
 
     def corner
-      "+"
+      "+".dark_gray
     end
 
     def edge
-      "-"
+      "-".dark_gray
     end
 
     def pipe
-      "|"
+      "|".dark_gray
     end
 
     def sep
-      " | "
+      " | ".dark_gray
     end
 
     def info_sep
-      " | "
+      " | ".dark_gray
     end
 
     def fill
-      "-"
+      "-".dark_gray
     end
 
     def print_header
@@ -47,11 +47,11 @@ module MMTop
     end
 
     def column_fill(index)
-      "-"  * table_header_columns[index].size
+      fill * table_header_columns[index].size
     end
 
     def sep_fill
-      "-"  * sep.size
+      fill * sep.size
     end
 
     def column_value(index, str, fill=" ")
@@ -98,8 +98,16 @@ module MMTop
       end
     end
 
-    def shorten_query(query, size)
-      query ? query[0..size-1] : ''
+    def format_process(process, sz)
+      query = process.sql ? process.sql[0..sz-2] : ''
+      case process.time
+        when 0..2:
+          query
+        when 2..10:
+          query.white.bold
+        else
+          query.red
+      end 
     end
 
     def clear_screen
@@ -112,20 +120,20 @@ module MMTop
       str += info_sep + column_value(1, p.id ? p.id.to_s : '')
       str += info_sep + column_value(2, format_time(p.time))
       str += info_sep 
-      str += shorten_query(p.query, @x - str.size - 1)
+      str += format_process(p, @x - str.size - 1)
       str += " " * (@x - str.size - 1) + pipe
       puts str
     end
 
     def print_host(info)
-      str = pipe + " " + column_value(0, info.host.name + " ", "-")
+      str = pipe + " " + column_value(0, info.host.name + " ", "-".dark_gray)
       str += sep_fill + column_fill(1) + sep_fill + column_fill(2)
       str += info_sep + column_value(3, info.connections.size.to_s)
       str += info_sep + column_value(4, format_slave_status(info.slave_status))
       str += info_sep + column_value(5, format_slave_delay(info.slave_status))
       str += info_sep + column_value(6, info.stats[:qps].to_s)
       str += info_sep
-      str += "-" * (@x - str.size - 1)
+      str += "-".dark_gray * (@x - str.size - 1)
       str += pipe
       puts str
       info.processlist.each do |p|
@@ -148,7 +156,6 @@ module MMTop
         print_host(info)
       end
       print_footer
-      $stdout.flush
     end
   end
 end
