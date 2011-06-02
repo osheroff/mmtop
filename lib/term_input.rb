@@ -23,7 +23,12 @@ module MMTop
       while true
         print "> "
         $stdout.flush
-        cmdline = $stdin.readline
+        cmdline = nil
+        begin 
+          cmdline = $stdin.readline
+        rescue EOFError
+          exit
+        end
         return if cmdline == "\n"
 
         c = find_command(cmdline)

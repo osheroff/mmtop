@@ -52,6 +52,10 @@ module MMTop
       end
     end
 
+    def all_processes
+      @info.map(&:processlist).flatten
+    end
+
     def get_info
       @info = hosts.map { |h| h.hostinfo }
       run_filters
