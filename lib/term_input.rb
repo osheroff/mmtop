@@ -1,4 +1,5 @@
 require 'timeout'
+require 'readline' 
 
 module MMTop
   class TermInput
@@ -20,16 +21,10 @@ module MMTop
     def control_mode(config)
       raw(false)
       while true
-        print "> "
-        $stdout.flush
-        cmdline = nil
-        begin 
-          cmdline = $stdin.readline
-        rescue EOFError
-          exit
-        end
-        return if cmdline == "\n"
-
+        cmdline = Readline::readline('> ')
+        exit if cmdline.nil?
+        Readline::HISTORY.push(cmdline) 
+        return if cmdline.empty?
         c = find_command(cmdline)
         if c.nil?
           c = find_command("help")
