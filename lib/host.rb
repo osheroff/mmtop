@@ -32,6 +32,10 @@ module MMTop
       query("show slave status")[0]
     end
 
+    def wedge_monitor?
+      @options['wedge_monitor']
+    end
+
     def stats
       stats = {}
       queries = query("show global status like 'Questions'")[0][:Value].to_i

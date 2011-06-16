@@ -30,7 +30,7 @@ args = Getopt::Declare.new(spec)
 config = MMTop::Config.new(args)
 
 printer = MMTop::TermPrinter.new
-input = MMTop::TermInput.new(5)
+input = MMTop::TermInput.new
 
 while true
   MMTop::PID.reset

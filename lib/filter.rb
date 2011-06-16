@@ -26,8 +26,15 @@ module MMTop
       @block = block.to_proc
     end
 
-    def run(query_list)
-      @block.call(query_list)
+    def run(query_list, host, config)
+      case @block.arity
+        when 1
+          @block.call(query_list)
+        when 2
+          @block.call(query_list, host)
+        when 3
+          @block.call(query_list, host, config)
+      end
     end
     attr_accessor :name, :default
   end

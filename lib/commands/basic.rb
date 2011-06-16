@@ -80,3 +80,17 @@ MMTop::Command.register do |c|
     end
   end
 end
+
+MMTop::Command.register do |c|
+  c.regexp /^sleep\s+([\d\.]+)/
+  c.usage "sleep TIME"
+  c.explain "Set mmtop sleep time"
+  c.command do |cmd, config|
+    cmd =~ c.regexp
+    sleep = $1.to_f
+    if sleep == 0.0
+      puts "sleep must be over 0."
+    end
+    config.options['sleep'] = sleep
+  end
+end

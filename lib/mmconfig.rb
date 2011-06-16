@@ -24,11 +24,14 @@ module MMTop
       end.compact
 
       @filters = MMTop::Filter.default_filters
+      config['sleep'] ||= 5
+      @options = config
     end
 
     attr_accessor :hosts
     attr_accessor :info
     attr_accessor :filters
+    attr_accessor :options
 
     def find_pid(pid)
       ret = info.map { |i|
@@ -47,7 +50,7 @@ module MMTop
     def run_filters
       @info.each do |i|
         @filters.each do |f|
-          f.run(i.processlist)
+          f.run(i.processlist, i, self)
         end
       end
     end

@@ -10,8 +10,7 @@ module MMTop
       end
     end
 
-    def initialize(sleep)
-      @sleep = sleep
+    def initialize()
     end
 
     def find_command(cmd)
@@ -43,7 +42,7 @@ module MMTop
       raw(true)
       char = nil
       begin
-        Timeout::timeout(@sleep) do
+        Timeout::timeout(config.options['sleep']) do
           char = $stdin.read(1)
         end
       rescue Timeout::Error
