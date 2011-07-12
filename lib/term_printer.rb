@@ -43,7 +43,7 @@ module MMTop
     end
 
     def table_header_columns
-      ["hostname        ", "pid  ", "time", "#cx", "slave  ", "delay", "qps   ", Time.now.to_s]
+      @header_columns ||= ["hostname        ", "pid  ", "time", "#cx", "slave  ", "delay", "qps   ", "comment", Time.now.to_s]
     end
 
     def column_fill(index)
@@ -132,6 +132,7 @@ module MMTop
       str += info_sep + column_value(4, format_slave_status(info.slave_status))
       str += info_sep + column_value(5, format_slave_delay(info.slave_status))
       str += info_sep + column_value(6, info.stats[:qps].to_s)
+      str += info_sep + column_value(7, info.host.comment || '')
       str += info_sep
       str += "-".dark_gray * (@x - str.size - 1)
       str += pipe
@@ -147,11 +148,17 @@ module MMTop
     end
 
     def print_info(host_infos)
+      max_comment_size = host_infos.map { |i| (i.host.comment && i.host.comment.size).to_i }.max
+      comment_index = 7
+      table_header_columns[comment_index] += (' ' * (max_comment_size - 'comment'.size)) if max_comment_size > 'comment'.size 
+
       clear_screen
       get_dim
       print_header
       print_table_header
       print_header
+
+
       host_infos.each do |info|
         print_host(info)
       end
