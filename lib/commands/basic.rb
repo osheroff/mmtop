@@ -28,8 +28,8 @@ MMTop::Command.register do |c|
     pid = $1.to_i
     ps = config.find_pid(pid)
     if ps
-      puts "%-20s%-6s%-20s%-20s" % ["status","time","client", "server"]
-      puts "%-20s%-6s%-20s%-20s" % [ps.status, ps.time, ps.client, ps.host.name]
+      puts "%-20s%-6s%-20s%-20s%-20s" % ["status","time","client", "server", "database"]
+      puts "%-20s%-6s%-20s%-20s%-20s" % [ps.status, ps.time, ps.client, ps.host.name, ps.db]
       puts ps.sql
     else
       puts "No such pid #{p}"

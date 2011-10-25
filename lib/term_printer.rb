@@ -126,13 +126,13 @@ module MMTop
     end
 
     def print_host(info)
-      str = pipe + " " + column_value(0, info.host.name + " ", "-".dark_gray)
+      str = pipe + " " + column_value(0, info.host.name + " " + (info.host.comment || ""), "-".dark_gray)
       str += sep_fill + column_fill(1) + sep_fill + column_fill(2)
       str += info_sep + column_value(3, info.connections.size.to_s)
       str += info_sep + column_value(4, format_slave_status(info.slave_status))
       str += info_sep + column_value(5, format_slave_delay(info.slave_status))
       str += info_sep + column_value(6, info.stats[:qps].to_s)
-      str += info_sep + column_value(7, info.host.comment || '')
+      #str += info_sep + column_value(7, info.host.comment || '')
       str += info_sep
       str += "-".dark_gray * (@x - str.size - 1)
       str += pipe
@@ -148,9 +148,9 @@ module MMTop
     end
 
     def print_info(host_infos)
-      max_comment_size = host_infos.map { |i| (i.host.comment && i.host.comment.size).to_i }.max
-      comment_index = 7
-      table_header_columns[comment_index] += (' ' * (max_comment_size - 'comment'.size)) if max_comment_size > 'comment'.size 
+      #max_comment_size = host_infos.map { |i| (i.host.comment && i.host.comment.size).to_i }.max
+      #comment_index = 7
+      #table_header_columns[comment_index] += (' ' * (max_comment_size - table_header_columns[comment_index].size)) if max_comment_size > table_header_columns[comment_index].size
 
       clear_screen
       get_dim

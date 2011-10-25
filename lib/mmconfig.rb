@@ -14,6 +14,7 @@ module MMTop
       @hosts = config['hosts'].map do |h|
         h['user'] ||= (user || config['user'])
         h['password'] ||= (pass || config['password'])
+        h['wedge_monitor'] ||= config['wedge_monitor']
 
         begin
           Host.new(h['host'], h['user'], h['password'], h)

@@ -16,7 +16,7 @@ module MMTop
       @last_queries = nil
     end
 
-    attr_accessor :name, :comment
+    attr_accessor :name, :comment, :options
 
     def query(q)
       res = []
