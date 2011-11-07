@@ -14,7 +14,7 @@ module MMTop
       hosts.each { |h|
         top = new_top.find { |t| t[:hostname] == h.name }
         if top[:levels] > 0 
-          h.name = ("  " * top[:levels]) + '\_' + h.name
+          h.display_name = ("  " * top[:levels]) + '\_' + h.name
         end
       }
       hosts

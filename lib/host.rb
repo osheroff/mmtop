@@ -12,11 +12,12 @@ module MMTop
       # rescue connection errors or sumpin
       @options = options
       @name = hostname
+      @display_name = @name
       @comment = options['comment']
       @last_queries = nil
     end
 
-    attr_accessor :name, :comment, :options
+    attr_accessor :display_name, :name, :comment, :options
 
     def query(q)
       res = []

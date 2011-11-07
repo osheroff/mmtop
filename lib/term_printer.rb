@@ -126,7 +126,7 @@ module MMTop
     end
 
     def print_host(info)
-      str = pipe + " " + column_value(0, info.host.name + " " + (info.host.comment || ""), "-".dark_gray)
+      str = pipe + " " + column_value(0, info.host.display_name + " " + (info.host.comment || ""), "-".dark_gray)
       str += sep_fill + column_fill(1) + sep_fill + column_fill(2)
       str += info_sep + column_value(3, info.connections.size.to_s)
       str += info_sep + column_value(4, format_slave_status(info.slave_status))
