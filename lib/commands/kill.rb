@@ -44,6 +44,20 @@ MMTop::Command.register do |c|
 end
 
 MMTop::Command.register do |c|
+  c.regexp %r{^k(:?ill)?\s+l(:?ong)?\s+(\d+)}
+  c.usage "kill long TIME"
+  c.explain "Kill any queries over TIME seconds"
+  c.command do |cmd, config|
+    cmd =~ c.regexp
+    time = $3.to_i
+    MMTop::Command.kill_prompt(config.all_processes.select { |p| p.time > time && p.sql =~ /select/i })
+  end
+end
+
+
+
+
+MMTop::Command.register do |c|
   c.regexp %r{^k(ill)?\s+(/.*/\w*)}
   c.usage "kill /REGEXP/"
   c.explain "Kill a number of queries by REGEXP"
