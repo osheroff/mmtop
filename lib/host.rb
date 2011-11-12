@@ -31,7 +31,9 @@ module MMTop
 
     def slave_status
       return nil if @options['expect_slave'] == false
-      query("show slave status")[0]
+      res = query("show slave status")[0]
+      return nil if res && res[:Master_User] == 'test'
+      res
     end
 
     def wedge_monitor?
