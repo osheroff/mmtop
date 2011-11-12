@@ -6,6 +6,11 @@ module MMTop
       $stdout.sync = true
     end
 
+    def reset!
+      @header_columns = nil
+      get_dim
+    end
+
     def get_dim
       @y, @x = %x{stty size}.split.collect { |x| x.to_i }
     end
@@ -143,8 +148,16 @@ module MMTop
     end
 
     def print_table_header
-      str = pipe + " " + table_header_columns.join(sep) + " " + pipe
-      puts str + ' ' * (@x - str.size - 1) + pipe
+      if table_header_columns.join(sep).size + 4 > @x
+        table_header_columns[-1] = ''
+      end
+
+      str = pipe + " " + table_header_columns.join(sep) 
+      fill_len = (@x - str.size) - 1
+     
+      print str
+      print ' ' * fill_len if fill_len > 0 
+      puts pipe
     end
 
     def print_info(host_infos)
@@ -153,7 +166,7 @@ module MMTop
       #table_header_columns[comment_index] += (' ' * (max_comment_size - table_header_columns[comment_index].size)) if max_comment_size > table_header_columns[comment_index].size
 
       clear_screen
-      get_dim
+      reset!
       print_header
       print_table_header
       print_header
