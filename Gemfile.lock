@@ -1,4 +1,15 @@
 GIT
+  remote: https://github.com/HeSYINUvSBZfxqA/alpha_omega
+  revision: 8f87d60c19ad604dc88abe0df86cb120bb130dc1
+  specs:
+    alpha_omega (0.0.36)
+      HeSYINUvSBZfxqA-capistrano
+      HeSYINUvSBZfxqA-capistrano_colors
+      HeSYINUvSBZfxqA-capistrano_log
+      HeSYINUvSBZfxqA-foreman
+      grit
+
+GIT
   remote: https://github.com/brianmario/mysql2.git
   revision: 3f972389c1c35b91666457e4794fa8439a7932bc
   specs:
@@ -7,11 +18,41 @@ GIT
 GEM
   remote: http://rubygems.org/
   specs:
+    HeSYINUvSBZfxqA-capistrano (2.5.21)
+      highline
+      net-scp (>= 1.0.0)
+      net-sftp (>= 2.0.0)
+      net-ssh (>= 2.0.14)
+      net-ssh-gateway (>= 1.0.0)
+    HeSYINUvSBZfxqA-capistrano_colors (0.5.5)
+    HeSYINUvSBZfxqA-capistrano_log (0.0.2)
+      HeSYINUvSBZfxqA-capistrano (>= 2.5.14)
+    HeSYINUvSBZfxqA-foreman (0.20.0.4)
+      term-ansicolor (~> 1.0.5)
+      thor (>= 0.13.6)
+    diff-lcs (1.1.3)
     getopt-declare (1.29)
+    grit (2.4.1)
+      diff-lcs (~> 1.1)
+      mime-types (~> 1.15)
+    highline (1.6.8)
+    json (1.6.1)
+    mime-types (1.17.2)
+    net-scp (1.0.4)
+      net-ssh (>= 1.99.1)
+    net-sftp (2.0.5)
+      net-ssh (>= 2.0.9)
+    net-ssh (2.2.1)
+    net-ssh-gateway (1.1.0)
+      net-ssh (>= 1.99.1)
+    term-ansicolor (1.0.7)
+    thor (0.14.6)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  alpha_omega!
   getopt-declare
+  json
   mysql2!
