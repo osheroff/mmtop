@@ -41,5 +41,12 @@ groups =
 set :ruby_env, "/data/zendesk/config/ree.env"
 set :ruby_rvm, "/usr/local/lib/rvm"
 
+namespace :deploy do
+  task :symlink do
+    run "ln -sf /data/releases/mmtop_alpha/mmtop.rb /data/zendesk/bin/"
+  end
+end
+
+
 before "deploy:update_code","deploy:lock"
-after "deploy:update_code","ruby:bundle"
+after "deploy:update_code","ruby:bundle","deploy:symlink"
