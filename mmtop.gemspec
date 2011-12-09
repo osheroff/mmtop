@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.summary     = "A mytop-ish variant that can watch many mysql servers"
 
   s.add_runtime_dependency("mysql2")
+  s.add_runtime_dependency("getopt-declare")
 
   if RUBY_VERSION < "1.9"
     s.add_development_dependency("ruby-debug")
