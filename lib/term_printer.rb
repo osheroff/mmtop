@@ -58,10 +58,19 @@ module MMTop
     def sep_fill
       fill * sep.size
     end
+  
+    def column_value_with_fill(index, str, fill, align)
+      fill_str = fill * (table_header_columns[index].size - str.size)
+      if align == :left
+        str + fill_str
+      else
+        fill_str + str
+      end
+    end
 
-    def column_value(index, str, fill=" ")
+    def column_value(index, str, fill=" ", align=:left)
       if str.size < table_header_columns[index].size
-        str + (fill * (table_header_columns[index].size - str.size))
+        column_value_with_fill(index, str, fill, align)
       else
         str[0..table_header_columns[index].size - 1]
       end
@@ -121,7 +130,7 @@ module MMTop
 
     def print_process(p)
       return if p.status.nil? || p.status.empty?
-      str = pipe + " " + column_value(0, "  " + p.client)
+      str = pipe + " " + column_value(0, p.client, ' ', :right)
       str += info_sep + column_value(1, p.id ? p.id.to_s : '')
       str += info_sep + column_value(2, format_time(p.time))
       str += info_sep 
