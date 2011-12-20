@@ -12,6 +12,8 @@ module MMTop
       user = cmdline['-u']
       pass = cmdline['-p']
       @hosts = config['hosts'].map do |h|
+        h = {'host' => h} if h.is_a?(String)
+
         h['user'] ||= (user || config['user'])
         h['password'] ||= (pass || config['password'])
         h['wedge_monitor'] ||= config['wedge_monitor']
