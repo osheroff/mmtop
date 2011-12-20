@@ -1,4 +1,4 @@
-require 'lib/string_colorize'
+require 'mmtop/string_colorize'
 
 module MMTop
   class TermPrinter
