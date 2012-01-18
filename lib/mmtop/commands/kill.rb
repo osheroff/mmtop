@@ -44,13 +44,17 @@ MMTop::Command.register do |c|
 end
 
 MMTop::Command.register do |c|
-  c.regexp %r{^k(:?ill)?\s+l(:?ong)?\s+(\d+)}
-  c.usage "kill long TIME"
-  c.explain "Kill any queries over TIME seconds"
+  c.regexp %r{^k(:?ill)?\s+l(:?ong)?\s+(\d+)\s*(\w*)}
+  c.usage "kill long TIME [SERVER]"
+  c.explain "Kill any queries over TIME seconds on optional server"
   c.command do |cmd, config|
     cmd =~ c.regexp
     time = $3.to_i
-    MMTop::Command.kill_prompt(config.all_processes.select { |p| p.time > time && p.sql =~ /select/i })
+    server = $4.strip
+    list = config.all_processes.select { |p| 
+      p.time > time && p.sql =~ /select/i && (server.nil? || server.size == 0 || (server == p.host.name))
+    }
+    MMTop::Command.kill_prompt(list)
   end
 end
 
