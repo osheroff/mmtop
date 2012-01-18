@@ -19,7 +19,11 @@ module MMTop
     end
 
     def kill!
-      @host.query("KILL #{@real_id}")
+      begin 
+        @host.query("KILL #{@real_id}")
+      rescue Mysql2::Error => e
+        puts e
+      end
     end
 
     def sql
