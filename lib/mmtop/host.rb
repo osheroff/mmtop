@@ -1,3 +1,5 @@
+require 'mmtop/qps'
+
 module MMTop
   class Host
     def initialize(hostname, user, password, options)
@@ -44,18 +46,10 @@ module MMTop
       stats = {}
       queries = query("show global status like 'Questions'")[0][:Value].to_i
 
-      if @last_queries
-        elapsed = Time.now.to_i - @last_queries[:time]
-        if elapsed > 0 
-          qps = (queries - @last_queries[:count]) / elapsed
-        else 
-          qps = queries - @last_queries[:count]
-        end
-        stats[:qps] = qps
-      end
-      @last_queries = {}
-      @last_queries[:count] = queries
-      @last_queries[:time] = Time.now.to_i
+      @qps ||= MMTop::QPS.new
+      @qps.add_sample(queries, Time.now)
+      stats[:qps] = @qps.calc.to_i
+
       stats
     end
 
