@@ -112,4 +112,13 @@ module MMTop
       config.hosts = MMTop::Topology.new(config).new_hostlist
     end 
   end
+
+  MMTop::Command.register do |c|
+    c.regexp /map_topology/
+    c.usage "map_topology"
+    c.explain "Re-Map the slave-chain topology"
+    c.command do |cmd, config|
+      config.options['discovered'] = false
+    end
+  end
 end
