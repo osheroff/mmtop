@@ -1,3 +1,6 @@
+# I'd like to say that I no longer understand this code.
+# Also, I'd like to say that it's unlikely to work for you, the general public.  patches welcome!
+
 module MMTop
   class Topology
     def initialize(config)
@@ -107,10 +110,10 @@ module MMTop
   end
 
   Filter.add_filter("discover_topology") do |queries, hostinfo, config|
-    if !config.options['discovered']
-      config.options['discovered'] = true
+    if config.options['discover_topology'] && !config.options['topology.discovered']
+      config.options['topology.discovered'] = true
       config.hosts = MMTop::Topology.new(config).new_hostlist
-    end 
+    end
   end
 
   MMTop::Command.register do |c|
