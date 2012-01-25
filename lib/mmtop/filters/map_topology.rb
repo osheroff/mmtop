@@ -13,9 +13,10 @@ module MMTop
 
       new_top = create_sort_array(topology)
 
-      hosts = @config.hosts.sort_by { |h| new_top.find_index { |t| t[:hostname] == h.name } }
+      hosts = @config.hosts.sort_by { |h| new_top.find_index { |t| t[:hostname] == h.name } || 1_000_000 }
       hosts.each { |h|
         top = new_top.find { |t| t[:hostname] == h.name }
+        next unless top
         if top[:levels] > 0 
           h.display_name = ("  " * top[:levels]) + '\_' + h.name
         end
@@ -73,7 +74,11 @@ module MMTop
 
     def find_master_slave
       topology = @config.hosts.inject({}) { |accum, h|
-        hostname = h.query("show global variables where Variable_name='hostname'")[0][:Value]
+        rows = h.query("show global variables where Variable_name='hostname'")
+        next accum if rows.empty?
+
+        hostname = rows.first[:Value]
+
         hostname = hostname.split('.')[0]
         status = h.slave_status
 
