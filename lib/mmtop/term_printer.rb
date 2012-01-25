@@ -133,14 +133,16 @@ module MMTop
       str = pipe + " " + column_value(0, p.client, ' ', :right)
       str += info_sep + column_value(1, p.id ? p.id.to_s : '')
       str += info_sep + column_value(2, format_time(p.time))
-      str += info_sep 
+      str += info_sep
       str += format_process(p, @x - str.size - 1)
       str += " " * (@x - str.size - 1) + pipe
       puts str
     end
 
     def print_host(info)
-      str = pipe + " " + column_value(0, info.host.display_name + " " + (info.host.comment || ""), "-".dark_gray)
+      display_name = info.host.display_name
+      display_name = (display_name + "!").red if info.host.dead?
+      str = pipe + " " + column_value(0, display_name + " " + (info.host.comment || ""), "-".dark_gray)
       str += sep_fill + column_fill(1) + sep_fill + column_fill(2)
       str += info_sep + column_value(3, info.connections.size.to_s)
       str += info_sep + column_value(4, format_slave_status(info.slave_status))

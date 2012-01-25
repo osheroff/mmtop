@@ -22,13 +22,33 @@ module MMTop
     attr_accessor :display_name, :name, :comment, :options
 
     def query(q)
+      return [] if dead?
+
       res = []
-      ret = @mysql.query(q)
+      begin
+        ret = @mysql.query(q)
+      rescue Mysql2::Error => e
+        if [2007, 2013].include?(e.error_number)
+          mark_dead!
+          return []
+        else
+          raise e
+        end
+      end
+
       return nil unless ret
       ret.each(:symbolize_keys => true) do |r|
         res << r
       end
       res
+    end
+
+    def mark_dead!
+      @dead = true
+    end
+
+    def dead?
+      @dead
     end
 
     def slave_status
@@ -44,7 +64,10 @@ module MMTop
 
     def stats
       stats = {}
-      queries = query("show global status like 'Questions'")[0][:Value].to_i
+      row = query("show global status like 'Questions'")
+      return {} if row.empty?
+
+      queries = row.first[:Value].to_i
 
       @qps ||= MMTop::QPS.new
       @qps.add_sample(queries, Time.now)
