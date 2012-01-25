@@ -10,13 +10,23 @@ module MMTop
       m2opts[:socket] = options['socket'] if options['socket']
       m2opts[:port] = options['port'] if options['port']
       m2opts[:reconnect] = true
-      @mysql = Mysql2::Client.new(m2opts)
-      # rescue connection errors or sumpin
       @options = options
       @name = hostname
       @display_name = @name
       @comment = options['comment']
       @last_queries = nil
+
+      begin
+        @mysql = Mysql2::Client.new(m2opts)
+      rescue Mysql2::Error => e
+        if e.error_number == 2003
+          mark_dead!
+        else
+          raise e
+        end
+      end
+
+      # rescue connection errors or sumpin
     end
 
     attr_accessor :display_name, :name, :comment, :options

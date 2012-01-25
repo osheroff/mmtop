@@ -18,12 +18,7 @@ module MMTop
         h['password'] ||= (pass || config['password'])
         h['wedge_monitor'] ||= config['wedge_monitor']
 
-        begin
-          Host.new(h['host'], h['user'], h['password'], h)
-        rescue Mysql2::Error => e
-          puts e
-          nil
-        end
+        Host.new(h['host'], h['user'], h['password'], h)
       end.compact
 
       @filters = MMTop::Filter.default_filters
