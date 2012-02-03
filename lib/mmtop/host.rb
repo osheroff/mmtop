@@ -38,10 +38,11 @@ module MMTop
       begin
         ret = @mysql.query(q)
       rescue Mysql2::Error => e
-        if [2007, 2013].include?(e.error_number)
+        if [2007, 2013, 2003].include?(e.error_number)
           mark_dead!
           return []
         else
+          puts "Got error number " + e.error_number.to_s
           raise e
         end
       end
