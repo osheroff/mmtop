@@ -1,5 +1,6 @@
 # I'd like to say that I no longer understand this code.
 # Also, I'd like to say that it's unlikely to work for you, the general public.  patches welcome!
+require 'socket'
 
 module MMTop
   class Topology
@@ -28,7 +29,7 @@ module MMTop
       array << host
       t.select { |k, v| 
         # find hosts who are our slaves
-        v[:master] == host[:hostname] 
+        v[:master] == host[:ip] 
       }.sort_by { |k, v| 
         # add those without children of their own first
         v[:is_master].to_i 
@@ -64,31 +65,34 @@ module MMTop
         stack.push(master)
       end
 
-      if last_master
-       host[:final_master] = last_master[:hostname] 
-      else
-       host[:final_master] = host[:hostname]
-      end
       host[:levels] = levels
     end
 
+    def resolve_to_ip(hostname)
+      return nil if hostname.nil?
+      return hostname if hostname =~ /\d+\.\d+\.\d+\.\d+\./
+
+      arr = Socket::gethostbyname(hostname)  
+      arr && arr.last.unpack("CCCC").join(".")
+    end
+
     def find_master_slave
+      @config.hosts.each { |host|
+        host.ip = resolve_to_ip(host.name) 
+      }
+
       topology = @config.hosts.inject({}) { |accum, h|
-        rows = h.query("show global variables where Variable_name='hostname'")
-        next accum if rows.empty?
+        next unless h.ip
 
-        hostname = rows.first[:Value]
-
-        hostname = hostname.split('.')[0]
         status = h.slave_status
 
         if status && status[:Master_User] != 'test'
           master_host = status[:Master_Host]
         end
 
-        master_host = short_name_for_host(master_host) if master_host
+        master_host = resolve_to_ip(master_host)
 
-        accum[hostname] = {:master => master_host, :hostname => hostname}
+        accum[h.ip] = {:master => master_host, :hostname => h.name, :ip => h.ip}
         accum
       }
 
@@ -100,17 +104,6 @@ module MMTop
         end 
       }
       topology
-    end
-
-    def short_name_for_host(h)
-      if h =~ /\d+.\d+.\d+.\d+/
-        h = ip_to_short_hostname(h)
-      end
-      h.split('.')[0]
-    end
-
-    def ip_to_short_hostname(ip)
-      `grep #{ip} /etc/hosts | awk '{print $2}'`.chomp
     end
   end
 

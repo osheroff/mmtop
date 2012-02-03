@@ -29,7 +29,7 @@ module MMTop
       # rescue connection errors or sumpin
     end
 
-    attr_accessor :display_name, :name, :comment, :options
+    attr_accessor :display_name, :name, :comment, :options, :ip
 
     def query(q)
       return [] if dead?
