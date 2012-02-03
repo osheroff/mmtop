@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mmtop (0.9.5)
+    mmtop (0.9.6)
       getopt-declare
       mysql2
 
