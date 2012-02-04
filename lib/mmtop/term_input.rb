@@ -1,5 +1,5 @@
 require 'timeout'
-require 'readline' 
+require 'readline'
 
 module MMTop
   class TermInput
@@ -23,7 +23,7 @@ module MMTop
       while true
         cmdline = Readline::readline('> ')
         exit if cmdline.nil?
-        Readline::HISTORY.push(cmdline) 
+        Readline::HISTORY.push(cmdline)
         return if cmdline.empty?
         c = find_command(cmdline)
         if c.nil?

@@ -5,7 +5,7 @@ module MMTop
       @query = result[:Info]
       @status = result[:State]
       @time = result[:Time]
-      @client, @client_port = result[:Host] && result[:Host].split(":") 
+      @client, @client_port = result[:Host] && result[:Host].split(":")
       @client ||= "(slave)"
       @client_port ||= ""
       @db = result[:db]
@@ -19,7 +19,7 @@ module MMTop
     end
 
     def kill!
-      begin 
+      begin
         @host.query("KILL #{@real_id}")
       rescue Mysql2::Error => e
         puts e

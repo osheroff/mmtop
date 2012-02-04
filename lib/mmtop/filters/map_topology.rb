@@ -18,7 +18,7 @@ module MMTop
       hosts.each { |h|
         top = new_top.find { |t| t[:hostname] == h.name }
         next unless top
-        if top[:levels] > 0 
+        if top[:levels] > 0
           h.display_name = ("  " * top[:levels]) + '\_' + h.name
         end
       }
@@ -27,13 +27,13 @@ module MMTop
 
     def insert_host_into_sort_array(t, host, array)
       array << host
-      t.select { |k, v| 
+      t.select { |k, v|
         # find hosts who are our slaves
-        v[:master] == host[:ip] 
-      }.sort_by { |k, v| 
+        v[:master] == host[:ip]
+      }.sort_by { |k, v|
         # add those without children of their own first
-        v[:is_master].to_i 
-      }.each { |k, s| 
+        v[:is_master].to_i
+      }.each { |k, s|
         insert_host_into_sort_array(t, s, array)
       }
       array
@@ -43,8 +43,8 @@ module MMTop
     def create_sort_array(t)
       array = []
       t.values.select { |v|
-        v[:levels] == 0 
-      }.sort_by { |v| 
+        v[:levels] == 0
+      }.sort_by { |v|
         v[:hostname]
       }.each { |v|
         insert_host_into_sort_array(t, v, array)
@@ -60,7 +60,7 @@ module MMTop
         # loop detection
         break if stack.include?(master)
 
-        last_master = master 
+        last_master = master
         levels += 1
         stack.push(master)
       end
@@ -72,13 +72,13 @@ module MMTop
       return nil if hostname.nil?
       return hostname if hostname =~ /\d+\.\d+\.\d+\.\d+\./
 
-      arr = Socket::gethostbyname(hostname)  
+      arr = Socket::gethostbyname(hostname)
       arr && arr.last.unpack("CCCC").join(".")
     end
 
     def find_master_slave
       @config.hosts.each { |host|
-        host.ip = resolve_to_ip(host.name) 
+        host.ip = resolve_to_ip(host.name)
       }
 
       topology = @config.hosts.inject({}) { |accum, h|
@@ -101,7 +101,7 @@ module MMTop
         master_top = topology[v[:master]]
         if master_top
           master_top[:is_master] = 1
-        end 
+        end
       }
       topology
     end

@@ -58,7 +58,7 @@ module MMTop
     def sep_fill
       fill * sep.size
     end
-  
+
     def column_value_with_fill(index, str, fill, align)
       fill_str = fill * (table_header_columns[index].size - str.size)
       if align == :left
@@ -121,7 +121,7 @@ module MMTop
           query.white.bold
         else
           query.red
-      end 
+      end
     end
 
     def clear_screen
@@ -163,11 +163,11 @@ module MMTop
         table_header_columns[-1] = ''
       end
 
-      str = pipe + " " + table_header_columns.join(sep) 
+      str = pipe + " " + table_header_columns.join(sep)
       fill_len = (@x - str.size) - 1
-     
+
       print str
-      print ' ' * fill_len if fill_len > 0 
+      print ' ' * fill_len if fill_len > 0
       puts pipe
     end
 

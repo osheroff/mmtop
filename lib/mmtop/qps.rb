@@ -7,7 +7,7 @@ module MMTop
     def self.window
       @window || DEFAULT_WINDOW
     end
-  
+
     def self.window=(window)
       @window = window
     end
@@ -27,7 +27,7 @@ module MMTop
 
       queries = samples.last[QUERIES] - samples.first[QUERIES]
       time = samples.last[TIME].to_i - samples.first[TIME].to_i
-    
+
       queries / time
     end
 
