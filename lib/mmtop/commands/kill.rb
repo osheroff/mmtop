@@ -1,22 +1,52 @@
+require 'ruby-debug'
 module MMTop
   class Command
+    def self.parse_kill_selection(str)
+      strs = str.split(/\s*,\s*/).map(&:strip)
+      strs.map { |s|
+        if not s =~ /^[0-9-\*]+$/
+          $stdout.puts("Invalid query selection, try again")
+          return nil
+        else
+          if s.include?("-")
+            a = s.split("-").map(&:strip)
+            ((a[0].to_i)..(a[1].to_i)).to_a
+          elsif s == "*"
+            s
+          else
+            s.to_i
+          end
+        end
+      }.flatten
+    end
+
     def self.kill_prompt(queries)
       if queries.empty?
         puts "No queries matched."
         return
       end
-  
+
       puts "killing: "
       queries.each_with_index do |q, i|
         puts "#{i}: #{q.host.name}\t\t#{q.sql[0..80]}"
       end
 
-      print "Please confirm (y|n)> "
-      if $stdin.readline != "y\n"
-        puts "no, ok."
+      print "What shall I kill? (ex: 1-4,5,9|*)> "
+
+      line = $stdin.readline
+      if line == "\n"
+        puts "nothing, ok."
       else
-        queries.each(&:kill!)
-        puts "killed."
+        indexes = parse_kill_selection(line)
+        indexes.each { |i|
+          if i == "*"
+            queries.each(&:kill!)
+          elsif queries[i]
+            queries[i].kill!
+          else
+            puts "No such query: #{i}"
+          end
+        }
       end
     end
   end
@@ -51,14 +81,12 @@ MMTop::Command.register do |c|
     cmd =~ c.regexp
     time = $3.to_i
     server = $4.strip
-    list = config.all_processes.select { |p| 
+    list = config.all_processes.select { |p|
       p.time > time && p.sql =~ /select/i && (server.nil? || server.size == 0 || (server == p.host.name))
     }
     MMTop::Command.kill_prompt(list)
   end
 end
-
-
 
 
 MMTop::Command.register do |c|
@@ -67,7 +95,7 @@ MMTop::Command.register do |c|
   c.explain "Kill a number of queries by REGEXP"
   c.command do |cmd, config|
     cmd =~ c.regexp
-    r = eval($2) 
+    r = eval($2)
     if !r.is_a?(Regexp)
       puts "Invalid regexp \"#{$1}\""
     else
