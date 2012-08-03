@@ -19,7 +19,7 @@ module MMTop
         h['wedge_monitor'] ||= config['wedge_monitor']
 
         Host.new(h['host'], h['user'], h['password'], h)
-      end.compact
+      end.compact.uniq { |h| h.name } 
 
       @filters = MMTop::Filter.default_filters
       config['sleep'] ||= 5
