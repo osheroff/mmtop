@@ -22,7 +22,9 @@ module MMTop
         if e.error_number == 2003
           mark_dead!
         else
-          raise e
+          $stdout.puts("Got Error Number #{e.error_number} (#{e.inspect}) trying to connect to #{@name}")
+          mark_dead!
+          sleep(1)
         end
       end
 
