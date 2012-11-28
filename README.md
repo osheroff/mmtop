@@ -18,28 +18,74 @@ simultaneously.
 
 #### Using the thing
 
-Once mmtop is up and running, you can start watching the queries from different servers fly 
-by.  
+#### Display
+
+The following columns are displayed by default:
+
+The server status line:
+
+```
+| hostname         | pid   | time | #cx | slave   | delay | qps    | comment | Wed Nov 28 22:51:23 +0000 2012        |
+| db22 -------------------------- | 217 |         |       | 0      | ------------------------------------------------|
+```
+
+```
+hostname: the hostname of the mysql server
+     #cx: number of clients currently connected to this host
+   slave: a status column indicating whether the slave on this host is currently running
+   delay: if a slave is configured, the time behind the master this slave is
+     qps: queries per second, calculated with each screen refresh
+ comment: a user configurable note about this host
+```
+
+The query status line:
+
+```
+| hostname         | pid   | time | #cx | slave   | delay | qps    | comment | Wed Nov 28 22:51:23 +0000 2012        |
+|            app16 | 1     | 1    | SELECT * FROM `example` where status_id = 5     |
+```
+
+```
+hostname: the hostname of the client running this query
+     pid: a virtual PID of the query you can refer to when killing/examining the query -- note that this bears no relation to the actual mysql query PID.
+    time: amount of time this query has been running for
+```
+
+#### Entering/exiting command mode:
+
+Hit "p" while queries are flying by to enter command mode. 
+Once in command mode, hit [enter] on a line by itself to exit command mode.
 
 
-Your most important commands while commands go by:
-		"p": Pause the listing.  Bring up a prompt.
-		"q": Quit
+#### Once in command mode
 
-Now from the prompt:
-    "help": show some help.
-		"x [PID]": Show the full text of the query, its state, and what host it's running on
-		"k [PID]": Kill the query.  mmtop will prompt you to make sure, as the author is a bonehead sometimes.
-		"ex [PID]": Explain the query
-		"l [HOST]": List the clients (and their connection count) currently connected to this host
-    (and others)
+The following commands are available:
 
-#### TODO: 
-Housekeeping.  k-long should be better.  help from the prompt.  QPS for hosts, maybe some innodb stats too. 
+```
+
+--------------------------------------------------------------------------------------------------------------------------------------------------+
+| command                                  | notes
+--------------------------------------------------------------------------------------------------------------------------------------------------+
+| ex[plain] PID                            | run an explain of the query on the server where the query is operating
+| filter add BLOCK | NAME [INDEX]          | adds a filter to the query list, explained more in the FILTERS section
+| filter available                         | lists available pre-cooked filters
+| filter list                              | lists active filters
+| filter rm INDEX                          | removes the filter at position INDEX
+| help                                     | show help text, yup.
+| kill PID                                 | kills the given query
+| kill long TIME [SERVER]                  | brings up the kill multiple dialog
+|                                          |   limited to SELECT queries longer than TIME seconds and optionally only where host == [SERVER] 
+| kill /regexp/                            | brings up the kill multiple dialog
+|                                          |   limited to queries matching the given regexp
+| list SERVER                              | lists active connections to the given host
+| map_topology                             | if replication topology automapping is enabled, try to re-figure the topology
+| quit                                     | exit mmtop
+| sleep [TIME]                             | control how long mmtop will sleep between query listings
+--------------------------------------------------------------------------------------------------------------------------------------------------+
+```
 
 #### Questions? 
-No one ever has any questions.  Feel free to message me here on github with bugs or what
-not. 
+Feel free to message me here on github with bugs or what not. 
 
 
 
