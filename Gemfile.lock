@@ -8,21 +8,24 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    columnize (0.3.5)
+    columnize (0.3.6)
+    debugger (1.2.2)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.1.1)
+      debugger-ruby_core_source (~> 1.1.5)
+    debugger-linecache (1.1.2)
+      debugger-ruby_core_source (>= 1.1.1)
+    debugger-ruby_core_source (1.1.5)
     getopt-declare (1.29)
-    linecache (0.46)
-      rbx-require-relative (> 0.0.4)
     mysql2 (0.3.11)
-    rbx-require-relative (0.0.5)
-    ruby-debug (0.10.4)
-      columnize (>= 0.1)
-      ruby-debug-base (~> 0.10.4.0)
-    ruby-debug-base (0.10.4)
-      linecache (>= 0.3)
+    rake (10.0.2)
+    yaggy (0.1.6)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  debugger
   mmtop!
-  ruby-debug
+  rake
+  yaggy
