@@ -115,9 +115,9 @@ module MMTop
     def format_process(process, sz)
       query = process.sql ? process.sql[0..sz-2] : ''
       case process.time
-        when 0..2:
+        when 0..2
           query
-        when 2..10:
+        when 2..10
           query.white.bold
         else
           query.red
