@@ -1,4 +1,3 @@
-require 'ruby-debug'
 module MMTop
   class Command
     def self.parse_kill_selection(str)
