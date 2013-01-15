@@ -24,7 +24,7 @@ while true
   MMTop::PID.reset
   config.get_info
   printer.print_info(config.info)
-  if not config.quick
+  if ! config.quick
     input.control(config)
   else
     break

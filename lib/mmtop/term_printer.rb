@@ -141,14 +141,14 @@ module MMTop
 
     def format_shards(shards)
 
-      shards.sort! { |a,b| a.id <=> b.id }
+      shards.sort! do |a,b| a.id <=> b.id end
 
       group_first = nil
       group_last = nil
       shards_str = []
       shards.each do |this_shard|
 
-        if not group_first
+        if ! group_first
 
           # start first group
           group_first = this_shard

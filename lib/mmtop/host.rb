@@ -98,13 +98,13 @@ module MMTop
     def shards
       database_list = query("show databases")
 
-      shard_list = database_list.map { |r|  
+      shard_list = database_list.map do |r|  
         if match = /^zd_shard([0-9]+)_(\w+)$/.match(r[:Database])
           Shard.new(self,match[1].to_i, match[2])
         else
           nil
         end
-      }
+      end
 
       shard_list.compact!
 
