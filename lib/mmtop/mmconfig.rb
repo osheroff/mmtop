@@ -21,12 +21,14 @@ module MMTop
         Host.new(h['host'], h['user'], h['password'], h)
       end.compact.uniq { |h| h.name }
 
-      @filters = MMTop::Filter.default_filters
       config['sleep'] ||= 5
 
       if config['plugin_dir']
         Dir.glob("#{config['plugin_dir']}/**/*.rb").each { |f| require(f) }
       end
+
+      @filters = MMTop::Filter.default_filters
+
       @options = config
     end
 
