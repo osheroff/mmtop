@@ -3,7 +3,7 @@ module MMTop
     def self.parse_kill_selection(str)
       strs = str.split(/\s*,\s*/).map(&:strip)
       strs.map { |s|
-        if not s =~ /^[0-9-\*]+$/
+        if s !~ /^[0-9\-\*]+$/
           $stdout.puts("Invalid query selection, try again")
           return nil
         else
