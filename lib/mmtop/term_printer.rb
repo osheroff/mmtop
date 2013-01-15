@@ -48,7 +48,7 @@ module MMTop
     end
 
     def table_header_columns
-      @header_columns ||= ["hostname        ", "pid  ", "time", "#cx", "slave  ", "delay", "qps   ", "shards           ", Time.now.to_s]
+      @header_columns ||= ["hostname        ", "pid  ", "time", "#cx", "slave  ", "delay", "qps   ", "comment", Time.now.to_s]
     end
 
     def column_fill(index)
@@ -139,54 +139,6 @@ module MMTop
       puts str
     end
 
-    def format_shards(shards)
-
-      shards.sort! do |a,b| a.id <=> b.id end
-
-      group_first = nil
-      group_last = nil
-      shards_str = []
-      shards.each do |this_shard|
-
-        if ! group_first
-
-          # start first group
-          group_first = this_shard
-          group_last = this_shard
-
-        else
-
-          if group_last.env == this_shard.env and group_last.id + 1 == this_shard.id
-            # continue group
-            group_last = this_shard
-          else
-            # end prvious group
-            if group_first == group_last
-              shards_str.push( group_first.id.to_s + '_' + group_first.env )
-            else
-              shards_str.push( group_first.id.to_s + '-' + group_last.id.to_s + '_' + group_last.env )
-            end
-
-            # start new group
-            group_first = this_shard
-            gorup_last = this_shard
-          end
-
-        end
-      end
-
-      # end last group
-      if group_first 
-        if group_first == group_last
-          shards_str.push( group_first.id.to_s + '_' + group_first.env )
-        else
-          shards_str.push( group_first.id.to_s + '-' + group_last.id.to_s + '_' + group_last.env )
-        end
-      end
-
-      return shards_str * ','
-    end
-
     def print_host(info)
       display_name = info.host.display_name
       display_name = (display_name + "!").red if info.host.dead?
@@ -196,7 +148,6 @@ module MMTop
       str += info_sep + column_value(4, format_slave_status(info.slave_status))
       str += info_sep + column_value(5, format_slave_delay(info.slave_status))
       str += info_sep + column_value(6, info.stats[:qps].to_s)
-      str += info_sep + column_value(7, format_shards(info.shards))
       #str += info_sep + column_value(7, info.host.comment || '')
       str += info_sep
       str += "-".dark_gray * (@x - str.size - 1)

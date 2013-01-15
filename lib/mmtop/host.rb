@@ -95,48 +95,21 @@ module MMTop
       processlist.map { |r| Process.new(r, self) }
     end
 
-    def shards
-      database_list = query("show databases")
-
-      shard_list = database_list.map do |r|  
-        if match = /^zd_shard([0-9]+)_(\w+)$/.match(r[:Database])
-          Shard.new(self,match[1].to_i, match[2])
-        else
-          nil
-        end
-      end
-
-      shard_list.compact!
-
-      return shard_list
-    end
-
     def hostinfo
-      HostInfo.new(self, processlist, slave_status, stats, shards)
+      HostInfo.new(self, processlist, slave_status, stats)
     end
-  end
-
-  class Shard
-    def initialize(host, id, env)
-      @host = host
-      @id = id
-      @env = env
-    end
-
-    attr_reader :host, :id, :env
   end
 
   class HostInfo
-    def initialize(host, processlist, slave_status, stats, shards)
+    def initialize(host, processlist, slave_status, stats)
       @host = host
       @processlist = processlist
       @connections = processlist.clone
       @slave_status = slave_status
       @stats = stats
-      @shards = shards
     end
 
-    attr_reader :host, :processlist, :slave_status, :stats, :shards
+    attr_reader :host, :processlist, :slave_status, :stats
 
     def connections
       @connections
