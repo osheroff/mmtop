@@ -30,12 +30,15 @@ module MMTop
       @filters = MMTop::Filter.default_filters
 
       @options = config
+
+      @quick = cmdline["-q"]
     end
 
     attr_accessor :hosts
     attr_accessor :info
     attr_accessor :filters
     attr_accessor :options
+    attr_accessor :quick
 
     def find_pid(pid)
       ret = info.map { |i|
