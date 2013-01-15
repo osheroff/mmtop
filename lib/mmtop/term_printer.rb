@@ -48,7 +48,7 @@ module MMTop
     end
 
     def table_header_columns
-      @header_columns ||= ["hostname        ", "pid  ", "time", "#cx", "slave  ", "delay", "qps   ", "comment", Time.now.to_s]
+      @header_columns ||= ["hostname        ", "pid  ", "time", "#cx", "slave  ", "delay", "qps   ", "comment " + info_sep + Time.now.to_s]
     end
 
     def column_fill(index)
@@ -142,13 +142,13 @@ module MMTop
     def print_host(info)
       display_name = info.host.display_name
       display_name = (display_name + "!").red if info.host.dead?
-      str = pipe + " " + column_value(0, display_name + " " + (info.host.comment || ""), "-".dark_gray)
+      str = pipe + " " + column_value(0, display_name + " ", "-".dark_gray)
       str += sep_fill + column_fill(1) + sep_fill + column_fill(2)
       str += info_sep + column_value(3, info.connections.size.to_s)
       str += info_sep + column_value(4, format_slave_status(info.slave_status))
       str += info_sep + column_value(5, format_slave_delay(info.slave_status))
       str += info_sep + column_value(6, info.stats[:qps].to_s)
-      #str += info_sep + column_value(7, info.host.comment || '')
+      str += info_sep + column_value(7, info.host.comment || '')
       str += info_sep
       str += "-".dark_gray * (@x - str.size - 1)
       str += pipe
