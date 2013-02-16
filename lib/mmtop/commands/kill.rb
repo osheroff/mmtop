@@ -37,7 +37,7 @@ module MMTop
         puts "nothing, ok."
       else
         indexes = parse_kill_selection(line)
-        indexes.each { |i|
+        indexes && indexes.each { |i|
           if i == "*"
             queries.each(&:kill!)
           elsif queries[i]
