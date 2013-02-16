@@ -10,7 +10,6 @@ spec = <<-EOL
   -c, --config <FILE>         Where to find mmtop_config
   -p, --password <pass>       The password used to connect to all DBs
   -u, --user <user>           The user used to connect to all DBs
-  -o, --ops                   David's funky ops mode
   -q, --quick                 Display the stats once and exist.
 EOL
 
