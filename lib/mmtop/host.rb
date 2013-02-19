@@ -117,7 +117,7 @@ module MMTop
     end
 
     def processlist
-      @processlist.select { |p| !p.status.nil? && !p.status.empty? }
+      @p ||= @processlist.select { |p| !p.status.nil? && !p.status.empty? }
     end
     attr_reader :host, :slave_status, :stats, :connections
   end
