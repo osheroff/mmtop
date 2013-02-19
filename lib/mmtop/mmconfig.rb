@@ -9,14 +9,13 @@ module MMTop
         raise "Please configure the 'hosts' section of mmtop_config"
       end
 
-      user = cmdline['-u']
-      pass = cmdline['-p']
+      cmdline_user = cmdline['-u']
+      cmdline_pass = cmdline['-p']
       @hosts = config['hosts'].map do |h|
         h = {'host' => h} if h.is_a?(String)
 
-        h['user'] ||= (user || config['user'])
-        h['password'] ||= (pass || config['password'])
-        h['wedge_monitor'] ||= config['wedge_monitor']
+        defaults = {'user' => (cmdline_user || config['user']), 'password' => (cmdline_pass || config['password'])}
+        h = defaults.merge(h)
 
         Host.new(h['host'], h['user'], h['password'], h)
       end.compact.uniq { |h| h.name }

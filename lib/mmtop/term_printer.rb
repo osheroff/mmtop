@@ -129,7 +129,6 @@ module MMTop
     end
 
     def print_process(p)
-      return if p.status.nil? || p.status.empty?
       str = pipe + " " + column_value(0, p.client, ' ', :right)
       str += info_sep + column_value(1, p.id ? p.id.to_s : '')
       str += info_sep + column_value(2, format_time(p.time))
@@ -140,6 +139,8 @@ module MMTop
     end
 
     def print_host(info)
+      return if info.processlist.empty? && info.host.hide_if_empty?
+
       display_name = info.host.display_name
       display_name = (display_name + "!").red if info.host.dead?
       str = pipe + " " + column_value(0, display_name + " ", "-".dark_gray)

@@ -15,7 +15,13 @@ module MMTop
       @display_name = @name
       @comment = options['comment']
       @last_queries = nil
+      puts options
+      @hide_if_empty = options['hide_if_empty']
 
+      initialize_mysql2_cx(m2opts)
+    end
+
+    def initialize_mysql2_cx(m2opts)
       begin
         @mysql = Mysql2::Client.new(m2opts)
       rescue Mysql2::Error => e
@@ -27,11 +33,13 @@ module MMTop
           sleep(1)
         end
       end
-
-      # rescue connection errors or sumpin
     end
 
     attr_accessor :display_name, :name, :comment, :options, :ip
+
+    def hide_if_empty?
+      !!@hide_if_empty
+    end
 
     def query(q)
       return [] if dead?
@@ -103,16 +111,15 @@ module MMTop
   class HostInfo
     def initialize(host, processlist, slave_status, stats)
       @host = host
-      @processlist = processlist
       @connections = processlist.clone
       @slave_status = slave_status
       @stats = stats
+      @processlist = processlist
     end
 
-    attr_reader :host, :processlist, :slave_status, :stats
-
-    def connections
-      @connections
+    def processlist
+      @processlist.select { |p| !p.status.nil? && !p.status.empty? }
     end
+    attr_reader :host, :slave_status, :stats, :connections
   end
 end

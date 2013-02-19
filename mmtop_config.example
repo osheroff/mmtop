@@ -4,7 +4,9 @@ password: XXXXXXXXX
 hosts:
   -
     host: db01
+    hide_if_empty: true
   -
     host: db02
+    hide_if_empty: false
 wedge_log: mmtop_wedge_log
 wedge_monitor: true
