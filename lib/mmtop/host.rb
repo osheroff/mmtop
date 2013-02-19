@@ -15,7 +15,6 @@ module MMTop
       @display_name = @name
       @comment = options['comment']
       @last_queries = nil
-      puts options
       @hide_if_empty = options['hide_if_empty']
 
       initialize_mysql2_cx(m2opts)
