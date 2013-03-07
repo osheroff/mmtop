@@ -72,7 +72,12 @@ module MMTop
       return nil if hostname.nil?
       return hostname if hostname =~ /\d+\.\d+\.\d+\.\d+\./
 
-      arr = Socket::gethostbyname(hostname)
+      begin
+        arr = Socket::gethostbyname(hostname)
+      rescue 
+        return nil
+      end
+
       arr && arr.last.unpack("CCCC").join(".")
     end
 
