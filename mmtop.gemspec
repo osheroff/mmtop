@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   end
   s.add_development_dependency("yaggy")
   s.add_development_dependency("rake")
+  s.add_development_dependency("mysql_isolated_server")
 
   s.executables  << "mmtop"
   s.files        = Dir.glob("lib/**/*")

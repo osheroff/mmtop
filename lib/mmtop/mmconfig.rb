@@ -20,7 +20,7 @@ module MMTop
         h = defaults.merge(h)
 
         Host.new(h['host'], h['user'], h['password'], h)
-      end.compact.uniq { |h| h.name }
+      end.compact.uniq { |h| h.name + h.port.to_s }
 
       config['sleep'] ||= 5
 
