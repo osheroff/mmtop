@@ -151,7 +151,9 @@ module MMTop
       str += info_sep + column_value(6, info.stats[:qps].to_s)
       str += info_sep + column_value(7, info.host.comment || '')
       str += info_sep
-      str += "-".dark_gray * (@x - str.size - 1)
+
+      fill_count = (@x - str.size - 1)
+      str += "-".dark_gray * fill_count if fill_count > 0
       str += pipe
       puts str
       info.processlist.each do |p|
