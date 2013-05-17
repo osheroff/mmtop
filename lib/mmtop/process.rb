@@ -10,6 +10,7 @@ module MMTop
       @client_port ||= ""
       @db = result[:db]
       @host = host
+      clean_sql!
     end
 
     attr_accessor :query, :status, :time, :client, :host, :db
@@ -25,6 +26,13 @@ module MMTop
         puts e
       end
     end
+
+    def clean_sql!
+      if @query && !@query.valid_encoding?
+        @query = @query.chars.select { |c| c.valid_encoding? }.join
+      end
+    end
+
 
     def sql
       @query
