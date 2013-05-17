@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+require 'bundler/setup'
+
+require 'yaml'
+require_relative 'boot_mysql_env'
+
+mmtop_config = {
+  'user' => 'root', 
+  'password' => '',
+  'hosts' => [
+    {'host' => '127.0.0.1', 'port' => $mysql_master.port},
+    {'host' => '127.0.0.1', 'port' => $mysql_slave.port}
+  ]
+}
+
+conf_file = File.join(File.expand_path(File.dirname(__FILE__)), 'mmtop.conf')
+File.open(conf_file, "w+") { |f| f.write(mmtop_config.to_yaml) }
+Thread.abort_on_exception = true
+Thread.new { 
+  while 1
+    $mysql_master.connection.query("select sleep(1)")
+    $mysql_master.connection.query("select concat(sleep(1), '\234foo')")
+  end
+}
+fork do 
+  exec("mmtop -c #{conf_file}")
+end
+
+Process.waitall
+
+
+
