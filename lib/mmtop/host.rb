@@ -53,7 +53,7 @@ module MMTop
           mark_dead!
           return []
         else
-          puts "Got error number " + e.error_number.to_s
+          puts "Got error number " + e.error_number.to_s + " querying #{@name}"
           raise e
         end
       end
