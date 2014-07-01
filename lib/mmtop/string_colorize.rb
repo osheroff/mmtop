@@ -1,3 +1,42 @@
+require 'delegate'
+
+class ColorString < Delegator
+  OFF = "\e[0m"
+  def initialize(string, color)
+    @string = string
+
+    if color.is_a?(Array)
+      @color_offsets = color
+    else
+      @color_offsets = [ [0, string.size, color] ]
+    end
+  end
+
+  attr_reader :color_offsets
+
+  def __getobj__
+    @string
+  end
+
+  def to_s
+    @color_offsets.map { |o|
+      o.last + @string[o[0], o[1]] + OFF
+    }.join
+  end
+
+  def +(other)
+    res = @string + other
+    if other.is_a?(ColorString)
+      adjusted_offsets = other.color_offsets.map do |arr|
+        [arr[0] + @string.size, arr[1], arr[2]]
+      end
+      ColorString.new(res, @color_offsets + adjusted_offsets)
+    else
+      ColorString.new(res, @color_offsets + [[@string.size, other.size, OFF]])
+    end 
+  end
+end
+
 class String
   CODES = {
     :off       => "\e[0m",
@@ -33,8 +72,9 @@ class String
 
   def colorize(*args)
     color = args.map { |color| CODES[color] if color.is_a?(Symbol) }.join("")
-    "#{color}#{self}#{OFF}"
+    ColorString.new(self, color)
   end
+
   def colourise(*args); colorize(*args); end
 
   def red; colorize(:red); end
@@ -43,11 +83,4 @@ class String
   def black; colorize(:black); end
   def white; colorize(:white); end
   def dark_gray; colorize(:dark_gray); end
-
-  def size_uncolorized
-    self.gsub(/\e.*?m/, '').size_raw
-  end
-
-  alias :size_raw :size
-  alias :size :size_uncolorized
 end
