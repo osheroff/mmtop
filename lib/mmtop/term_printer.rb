@@ -59,8 +59,8 @@ module MMTop
       fill * sep.size
     end
 
-    def column_value_with_fill(index, str, fill, align)
-      fill_str = fill * (table_header_columns[index].size - str.size)
+    def column_value_with_fill(index, max_size, str, fill, align)
+      fill_str = fill * (max_size - str.size)
       if align == :left
         str + fill_str
       else
@@ -68,11 +68,15 @@ module MMTop
       end
     end
 
-    def column_value(index, str, fill=" ", align=:left)
-      if str.size < table_header_columns[index].size
-        column_value_with_fill(index, str, fill, align)
+    def column_value(indexes, str, fill=" ", align=:left)
+      indexes = Array(indexes)
+      max_size = indexes.inject(0) { |s, idx| s + table_header_columns[idx].size }
+      max_size += sep_fill.size * (indexes.size - 1)
+	
+      if str.size < max_size
+        column_value_with_fill(indexes.first, max_size, str, fill, align)
       else
-        str[0..table_header_columns[index].size - 1]
+        str[0..max_size - 1]
       end
     end
 
@@ -142,9 +146,13 @@ module MMTop
       return if info.processlist.empty? && info.host.hide_if_empty?
 
       display_name = info.host.display_name
-      display_name = (display_name + "!").red if info.host.dead?
-      str = pipe + " " + column_value(0, display_name + " ", "-".dark_gray)
-      str += sep_fill + column_fill(1) + sep_fill + column_fill(2)
+      if info.host.dead?
+        display_name = (display_name + "!").red 
+      end
+
+      str = pipe + " " + column_value([0, 1, 2], display_name + " ", "-".dark_gray)
+    
+      #str += sep_fill + column_fill(1) + sep_fill + column_fill(2)
       str += info_sep + column_value(3, info.connections.size.to_s)
       str += info_sep + column_value(4, format_slave_status(info.slave_status))
       str += info_sep + column_value(5, format_slave_delay(info.slave_status))
