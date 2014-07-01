@@ -8,7 +8,7 @@ module MMTop
 
       return @@lookups[client] if @@lookups[client]
 
-      hostline = %x{dig -x #{client} +short}.chomp
+      hostline = %x{dig -x #{client} +short}.split("\n").first.to_s
       hostline.gsub!(/([^\.]+)\..*/, '\1')
       @@lookups[client] = hostline
       @@lookups[client] 
