@@ -15,8 +15,8 @@ Gem::Specification.new do |s|
   else
     s.add_development_dependency("debugger")
   end
-  s.add_development_dependency("yaggy")
   s.add_development_dependency("rake")
+  s.add_development_dependency("bump")
   s.add_development_dependency("mysql_isolated_server")
 
   s.executables  << "mmtop"
