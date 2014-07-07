@@ -23,14 +23,30 @@ MMTop::Command.register do |c|
   c.regexp /^[x|(?:examine)]\s+(\d+)/
   c.usage "x PID"
   c.explain "Show full query"
+
+  cols = ["status", "time", "client", "src_port", "server", "database"]
+  print_ps = lambda do |ps|
+    h = {}
+    headers = ""
+    data = "" 
+    cols.each { |c| 
+      val = ps.send(c)
+      size = [val.size, c.size].max + 2
+      headers += "%-#{size}s" % [c]
+      data += "%-#{size}s" % [val]
+    }
+
+    puts headers
+    puts data
+    puts ps.sql
+  end
+
   c.command do |cmd, config|
     cmd =~ c.regexp
     pid = $1.to_i
     ps = config.find_pid(pid)
     if ps
-      puts "%-20s%-6s%-20s%-20s%-20s" % ["status","time","client", "server", "database"]
-      puts "%-20s%-6s%-20s%-20s%-20s" % [ps.status, ps.time, ps.client, ps.host.name, ps.db]
-      puts ps.sql
+      print_ps.call(ps)
     else
       puts "No such pid #{p}"
     end

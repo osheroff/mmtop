@@ -14,6 +14,7 @@ module MMTop
     end
 
     attr_accessor :query, :status, :time, :client, :host, :db
+    alias :database :db
 
     def id
       @id ||= MMTop::PID.get
@@ -33,6 +34,13 @@ module MMTop
       end
     end
 
+    def server
+      @host.name
+    end
+
+    def src_port
+      @client_port
+    end
 
     def sql
       @query
