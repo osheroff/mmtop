@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "mmtop"
-  s.version     = "1.0.2"
+  s.version     = "1.1.0"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Ben Osheroff"]
   s.email       = ["ben@gimbo.net"]
