@@ -18,7 +18,7 @@ MMTop::Command.register do |c|
   end
 end
 
-    
+
 MMTop::Command.register do |c|
   c.regexp /^[x|(?:examine)]\s+(\d+)/
   c.usage "x PID"
@@ -28,8 +28,8 @@ MMTop::Command.register do |c|
   print_ps = lambda do |ps|
     h = {}
     headers = ""
-    data = "" 
-    cols.each { |c| 
+    data = ""
+    cols.each { |c|
       val = ps.send(c)
       size = [val.size, c.size].max + 2
       headers += "%-#{size}s" % [c]
@@ -108,5 +108,32 @@ MMTop::Command.register do |c|
       puts "sleep must be over 0."
     end
     config.options['sleep'] = sleep
+  end
+end
+
+MMTop::Command.register do |c|
+  c.regexp /^shell (.*)/
+  c.usage   "shell HOST|PID"
+  c.explain "open up a mysql command-line client on HOST or on the database that PID is on"
+  c.command do |cmd, config|
+    cmd =~ c.regexp
+    match = $1
+
+    if match =~ /^\d+$/
+      ps = config.find_pid(match.to_i)
+      if !ps
+        break puts "No such PID: #{match}"
+      end
+
+      host = ps.host
+    else
+      server = config.find_server(match)
+      if !server
+        break puts "No such host: #{server}"
+      end
+      host = server.host
+    end
+    opt = host.options
+    system("mysql --user='#{opt['user']}' --host='#{opt['host']}' --password='#{opt['password']}'")
   end
 end
