@@ -10,11 +10,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("mysql2")
   s.add_runtime_dependency("getopt-declare")
 
-  if RUBY_VERSION < "1.9"
-    s.add_development_dependency("ruby-debug")
-  else
-    s.add_development_dependency("debugger")
-  end
   s.add_development_dependency("rake")
   s.add_development_dependency("bump")
   s.add_development_dependency("mysql_isolated_server")
