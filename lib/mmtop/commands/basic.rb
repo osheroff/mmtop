@@ -137,3 +137,31 @@ MMTop::Command.register do |c|
     system("mysql --user='#{opt['user']}' --host='#{opt['host']}' --password='#{opt['password']}'")
   end
 end
+
+MMTop::Command.register do |c|
+  c.regexp /^narrow (.*)/
+  c.usage   "narrow HOST|off"
+  c.explain "only display queries on the cluster that contains HOST"
+
+
+  c.command do |cmd, config|
+    cmd =~ c.regexp
+    narrow_host = $1
+ 
+    MMTop::Topology.discover(config) # force discovery even if not configured
+
+    clusters = [[]]
+    config.hosts.each do |h|
+      if h.display_name =~ /^\s+\\/  # slave, starts with '\'.  i know, i know.
+        clusters.last << h
+      else
+        clusters << [h]
+      end
+    end
+
+    clusters.each do |cluster|
+      matches = cluster.any? { |c| c.name == narrow_host || narrow_host.downcase == "off" }
+      cluster.each { |c| c.hide = !matches } 
+    end
+  end
+end

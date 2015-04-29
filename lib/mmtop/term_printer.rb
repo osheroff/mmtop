@@ -143,7 +143,7 @@ module MMTop
     end
 
     def print_host(info)
-      return if info.processlist.empty? && info.host.hide_if_empty?
+      return if (info.processlist.empty? && info.host.hide_if_empty?) || info.host.hide
 
       display_name = info.host.display_name
       if info.host.dead?

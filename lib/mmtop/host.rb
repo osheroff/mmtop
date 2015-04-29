@@ -17,6 +17,7 @@ module MMTop
       @last_queries = nil
       @port = options['port'] || 3306
       @hide_if_empty = options['hide_if_empty']
+      @hide = false
 
       initialize_mysql2_cx(m2opts)
     end
@@ -35,7 +36,7 @@ module MMTop
       end
     end
 
-    attr_accessor :display_name, :name, :comment, :options, :ip
+    attr_accessor :display_name, :name, :comment, :options, :ip, :hide
     attr_reader :port
 
     def hide_if_empty?

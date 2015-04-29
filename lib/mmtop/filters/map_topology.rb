@@ -4,6 +4,14 @@ require 'socket'
 
 module MMTop
   class Topology
+    def self.discover(config)
+      if !config.options['topology.discovered']
+        config.options['topology.discovered'] = true
+        config.hosts = MMTop::Topology.new(config).new_hostlist
+      end
+      config
+    end
+
     def initialize(config)
       @config = config
     end
@@ -113,10 +121,7 @@ module MMTop
   end
 
   Filter.add_filter("discover_topology") do |queries, hostinfo, config|
-    if config.options['discover_topology'] && !config.options['topology.discovered']
-      config.options['topology.discovered'] = true
-      config.hosts = MMTop::Topology.new(config).new_hostlist
-    end
+    MMTop::Topology.discover(config) if config.options['discover_topology'] 
   end
 
   MMTop::Command.register do |c|
