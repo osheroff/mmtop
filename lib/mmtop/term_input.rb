@@ -23,6 +23,8 @@ module MMTop
       while true
         cmdline = Readline::readline('> ')
         exit if cmdline.nil?
+
+        cmdline.strip!
         Readline::HISTORY.push(cmdline)
         return if cmdline.empty?
         c = find_command(cmdline)
