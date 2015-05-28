@@ -17,7 +17,7 @@ module MMTop
     alias :database :db
 
     def id
-      @id ||= MMTop::PID.get
+      @id ||= MMTop::PID.get(@host, @real_id)
     end
 
     def kill!
