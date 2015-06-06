@@ -1,6 +1,10 @@
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'mmtop/version'
+
 Gem::Specification.new do |s|
   s.name        = "mmtop"
-  s.version     = "1.2.0"
+  s.version     = MMTop::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Ben Osheroff"]
   s.email       = ["ben@gimbo.net"]

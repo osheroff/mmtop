@@ -44,7 +44,10 @@ module MMTop
     end
 
     def print_footer
-      puts corner + edge * (@x - 2) + corner
+      footer_banner = (" mmtop version #{MMTop::VERSION} ".dark_gray) + "...".dark_gray + " press \"p\" to pause ".dark_gray
+      left_border_size = (@x - 2 - footer_banner.size) / 2 
+      right_border_size = @x - 2 - footer_banner.size - left_border_size
+      puts corner + (edge * left_border_size) + footer_banner + (edge * right_border_size) + corner
     end
 
     def table_header_columns

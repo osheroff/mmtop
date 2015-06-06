@@ -1,5 +1,6 @@
 require 'mysql2'
 require 'mmtop/mmconfig'
+require 'mmtop/version'
 require 'mmtop/host'
 require 'mmtop/process'
 require 'mmtop/term_printer'

@@ -6,6 +6,8 @@ MMTop::Command.register do |c|
     MMTop::Command.commands.sort_by(&:usage).each do |c|
       puts "%-50s %s" % [c.usage, c.explain]
     end
+    puts "%-50s %s" % ["[p]",     "pause mmtop (how you got here)"]
+    puts "%-50s %s" % ["[enter]", "resume mmtop (how you leave here)"]
   end
 end
 

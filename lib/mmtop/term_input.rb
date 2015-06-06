@@ -21,7 +21,7 @@ module MMTop
     def control_mode(config)
       raw(false)
       while true
-        cmdline = Readline::readline('> ')
+        cmdline = Readline::readline('mmtop> ')
         exit if cmdline.nil?
 
         cmdline.strip!
