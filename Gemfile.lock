@@ -8,11 +8,11 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
-    bump (0.5.0)
+    bump (0.5.2)
     getopt-declare (1.32)
-    mysql2 (0.3.14)
-    mysql_isolated_server (0.1.1)
-    rake (10.3.2)
+    mysql2 (0.3.18)
+    mysql_isolated_server (0.5.3)
+    rake (10.4.2)
 
 PLATFORMS
   ruby
