@@ -9,6 +9,7 @@ module MMTop
       m2opts[:password] = password
       m2opts[:socket] = options['socket'] if options['socket']
       m2opts[:port] = options['port'] if options['port']
+      m2opts[:connect_timeout] = 1
       m2opts[:reconnect] = true
       @options = options
       @name = hostname
