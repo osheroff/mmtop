@@ -12,7 +12,7 @@ GEM
     getopt-declare (1.32)
     mysql2 (0.3.18)
     mysql_isolated_server (0.5.3)
-    rake (10.4.2)
+    rake (13.0.1)
 
 PLATFORMS
   ruby
