@@ -32,7 +32,8 @@ MMTop::Command.register do |c|
     headers = ""
     data = ""
     cols.each { |c|
-      val = ps.send(c)
+      val = ps.send(c) || ""
+
       size = [val.size, c.size].max + 2
       headers += "%-#{size}s" % [c]
       data += "%-#{size}s" % [val]

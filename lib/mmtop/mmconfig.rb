@@ -1,4 +1,5 @@
 require 'yaml'
+require 'io/console'
 
 module MMTop
   class Config
@@ -13,13 +14,22 @@ module MMTop
 
       cmdline_user = cmdline['-u']
       cmdline_pass = cmdline['-p']
+
+      if config['prompt_password'] && !cmdline_pass
+        cmdline_pass = $stdin.getpass("database password please: ")
+      end
+
       @hosts = config['hosts'].map do |h|
         h = {'host' => h} if h.is_a?(String)
 
-        defaults = {'user' => (cmdline_user || config['user']), 'password' => (cmdline_pass || config['password'])}
+        defaults = {
+          'user' => (cmdline_user || config['user']), 
+          'password' => (cmdline_pass || config['password']),
+          'ssh_tunnel' => config['ssh_tunnel']
+        }
         h = defaults.merge(h)
 
-        Host.new(h['host'], h['user'], h['password'], h)
+        Host.new(hostname: h['host'], user: h['user'], password: h['password'], options: h)
       end.compact.uniq { |h| h.name + h.port.to_s }
 
       config['sleep'] ||= 5

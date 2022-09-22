@@ -1,8 +1,10 @@
 require 'mmtop/qps'
+require 'net/ssh/gateway'
+require 'etc'
 
 module MMTop
   class Host
-    def initialize(hostname, user, password, options)
+    def initialize(hostname:, user:, password:, options: {})
       m2opts = {}
       m2opts[:host] = hostname
       m2opts[:username] = user
@@ -11,6 +13,7 @@ module MMTop
       m2opts[:port] = options['port'] if options['port']
       m2opts[:connect_timeout] = 1
       m2opts[:reconnect] = true
+
       @options = options
       @name = hostname
       @display_name = @name
@@ -19,6 +22,11 @@ module MMTop
       @port = options['port'] || 3306
       @hide_if_empty = options['hide_if_empty']
       @hide = false
+
+
+      if options['ssh_tunnel']
+        setup_tunnel(options['ssh_tunnel'], m2opts)
+      end
 
       initialize_mysql2_cx(m2opts)
     end
@@ -31,10 +39,20 @@ module MMTop
           mark_dead!
         else
           $stdout.puts("Got Error Number #{e.error_number} (#{e.inspect}) trying to connect to #{@name}")
-          mark_dead!
+          mark_dead!(e.message)
           sleep(1)
         end
       end
+    end
+
+    def setup_tunnel(tunnel_opts, m2opts)
+      host = tunnel_opts.fetch('host')
+      user = tunnel_opts.fetch('user', Etc.getlogin)
+      $stderr.puts("opening ssh-tunnel to #{m2opts[:host]} via #{user}@#{host}")
+      gateway = Net::SSH::Gateway.new(host, user, verify_host_key: :never)
+      local_port = gateway.open(m2opts[:host], m2opts[:port] || 3306)
+      m2opts[:host] = "127.0.0.1"
+      m2opts[:port] = local_port
     end
 
     attr_accessor :display_name, :name, :comment, :options, :ip, :hide
@@ -67,12 +85,17 @@ module MMTop
       res
     end
 
-    def mark_dead!
+    def mark_dead!(message = nil)
+      @error_message = message
       @dead = true
     end
 
     def dead?
       @dead
+    end
+
+    def error_message
+      @error_message
     end
 
     def slave_status

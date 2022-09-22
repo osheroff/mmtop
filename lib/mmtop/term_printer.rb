@@ -150,7 +150,8 @@ module MMTop
 
       display_name = info.host.display_name
       if info.host.dead?
-        display_name = (display_name + "!").red 
+        display_name = ("!" + display_name).red 
+        info.host.comment = info.host.error_message
       end
 
       str = pipe + " " + column_value([0, 1, 2], display_name + " ", "-".dark_gray)

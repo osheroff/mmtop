@@ -9,8 +9,13 @@ module MMTop
       return @@lookups[client] if @@lookups[client]
 
       hostline = %x{dig -x #{client} +short}.split("\n").first.to_s
-      hostline.gsub!(/([^\.]+)\..*/, '\1')
-      @@lookups[client] = hostline
+      hostline = hostline.gsub(/([^\.]+)\..*/, '\1')
+      if hostline.empty?
+        @@lookups[client] = client
+      else
+        @@lookups[client] = hostline
+      end
+
       @@lookups[client] 
     end
   end

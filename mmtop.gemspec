@@ -13,10 +13,14 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency("mysql2")
   s.add_runtime_dependency("getopt-declare")
+  s.add_runtime_dependency("net-ssh-gateway")
+  s.add_runtime_dependency("ed25519")
+  s.add_runtime_dependency("bcrypt_pbkdf")
 
   s.add_development_dependency("rake")
   s.add_development_dependency("bump")
   s.add_development_dependency("mysql_isolated_server")
+  s.add_development_dependency("byebug")
 
   s.executables  << "mmtop"
   s.files        = Dir.glob("lib/**/*")

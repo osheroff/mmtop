@@ -24,6 +24,19 @@ class ColorString < Delegator
     }.join
   end
 
+  def [](range)
+    newstr = super
+    # I think this code is wrong and bad.
+    adjusted_offsets = @color_offsets.map do |o|
+      if o[0] > range.last
+        nil
+      else
+        [o[0] - range.first, range.last - range.first, o[2]]
+      end
+    end.compact
+    ColorString.new(newstr, adjusted_offsets)
+  end
+
   def +(other)
     res = @string + other
     if other.is_a?(ColorString)
